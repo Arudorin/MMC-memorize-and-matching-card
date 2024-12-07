@@ -6,36 +6,48 @@ import javax.swing.*;
 
 public class MatchCard {
 
-    int rows = 4;  
-    int cols = 6; 
-    int cardWidth = 90; 
-    int cardHeight = 128; 
+    String[] cardList = {
+        "a", "b", "c", "d", "e", "f", "g", "h", "i", "j"
+    };
 
-    int boardWidth = cols * cardWidth; 
-    int boardHeight = rows * cardHeight; 
+    int rows = 4;
+    int cols = 6;
+    int cardWidth = 90;
+    int cardHeight = 128;
 
-    JFrame frame = new JFrame("Memoriez Matching Card"); 
-    JLabel textLabel = new JLabel(); 
-    JPanel textPanel = new JPanel(); 
-    JPanel mainPanel; 
-    JPanel boardPanel = new JPanel(); 
-    JPanel restartGamePanel = new JPanel();  
+    ArrayList<Card> cardSet;
+    ImageIcon cardBackImageIcon;
+
+    int boardWidth = cols * cardWidth;
+    int boardHeight = rows * cardHeight;
+
+    JFrame frame = new JFrame("Memoriez Matching Card");
+    JLabel textLabel = new JLabel();
+    JPanel textPanel = new JPanel();
+    JPanel mainPanel;
+    JPanel boardPanel = new JPanel();
+    JPanel restartGamePanel = new JPanel();
     JButton restartButton = new JButton();
 
-    int errorCount = 0; 
-    ArrayList<JButton> board; 
+    int errorCount = 0;
+    ArrayList<JButton> board;
+    Timer hideCardTimer;
+    boolean gameReady = false;
+    JButton card1Selected;
+    JButton card2Selected;
 
-
-    Timer reviewCardsTimer; 
+    // Variabel untuk jumlah pasangan yang sudah dicocokkan
+    int matchedPairs = 0;  
+    Timer reviewCardsTimer;
 
     JLabel timerLabel = new JLabel();
-    Timer gameTimer; 
+    Timer gameTimer;
 
     // Set Waktu Awal Permainan
     int initialTime = 120;
     // Waktu yang tersisa 
-    int timeLeft = initialTime; 
-    
+    int timeLeft = initialTime;  
+
     MatchCard() {
         AudioPlayer audioPlayer = new AudioPlayer();
         audioPlayer.playBackgroundMusic("src/sound/bg_music.wav");
@@ -236,4 +248,82 @@ public class MatchCard {
 
     }
 
+    void setupCards() {
+        cardSet = new ArrayList<Card>();
+        for (String cardName : cardList) {
+            System.out.println(cardName);
+            //Memuat Card
+            Image cardImg = new ImageIcon(new File("src/img/" + cardName + ".jpg").getAbsolutePath()).getImage();
+
+            ImageIcon cardImageIcon = new ImageIcon(cardImg.getScaledInstance(cardWidth, cardHeight, java.awt.Image.SCALE_SMOOTH));
+            //Membuat objek kartu
+            Card card = new Card(cardName, cardImageIcon);
+            cardSet.add(card);
+        }
+        cardSet.addAll(cardSet);
+        //load the back card image
+        Image cardBackImg = new ImageIcon(getClass().getResource("./img/back.jpg")).getImage();
+        cardBackImageIcon = new ImageIcon(cardBackImg.getScaledInstance(cardWidth, cardHeight, java.awt.Image.SCALE_SMOOTH));
+    }
+
+    void shuffleCards() {
+        System.out.println(cardSet);
+        //Mengacak Kartu
+        for (int i = 0; i < cardSet.size(); i++) {
+            int j = (int) (Math.random() * cardSet.size());
+            //Menukar kartu
+            Card temp = cardSet.get(i);
+            cardSet.set(i, cardSet.get(j));
+            cardSet.set(j, temp);
+        }
+    }
+
+    void hideCards() {
+        if (gameReady && card1Selected != null && card2Selected != null) {
+            // Menyembunyikan kartu pertama
+            card1Selected.setIcon(cardBackImageIcon);
+            // Reset kartu pertama ke null  
+            card1Selected = null;  
+            // Menyembunyikan kartu kedua
+            card2Selected.setIcon(cardBackImageIcon);  
+            card2Selected = null;  // Reset kartu kedua ke null
+        } else {
+            for (int i = 0; i < board.size(); i++) {
+                board.get(i).setIcon(cardBackImageIcon);  // Menyembunyikan semua kartu pada papan
+            }
+            gameReady = true;  // Menandakan permainan siap untuk dimulai
+            restartButton.setEnabled(true);  // Mengaktifkan tombol restart
+        }
+    }
+
+    void restartGame() {
+        matchedPairs = 0;  // Reset jumlah pasangan yang cocok
+        errorCount = 0;    // Reset jumlah kesalahan
+        textLabel.setText("Errors: " + Integer.toString(errorCount));  // Reset label error
+        setupCards();
+        shuffleCards();  // Acak ulang kartu
+        gameReady = false;  // Set gameReady ke false saat memulai ulang permainan
+    
+        // Setel ulang waktu dan mulai timer lagi
+        timeLeft = initialTime;  // Setel ulang timer ke waktu awal (60 detik)
+        timerLabel.setText("Time Left: " + timeLeft);  // Update label timer dengan waktu awal
+        gameTimer.restart();  // Mulai ulang timer (gameTimer sudah diinisialisasi sebelumnya)
+        
+        // Menampilkan semua kartu untuk beberapa detik
+        for (int i = 0; i < board.size(); i++) {
+            board.get(i).setIcon(cardSet.get(i).cardImageIcon);
+        }
+    
+        // Timer untuk menyembunyikan kartu setelah beberapa detik
+        reviewCardsTimer = new Timer(2000, new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                // Mulai timer untuk menyembunyikan kartu
+                hideCardTimer.start();  
+            }
+        });
+
+        reviewCardsTimer.setRepeats(false);
+        reviewCardsTimer.start();
+    }
 }
