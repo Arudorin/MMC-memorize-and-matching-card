@@ -8,7 +8,7 @@ public class MainFrame extends JFrame {
         setLocationRelativeTo(null);
         setResizable(false);
 
-        GamePanel gamePanel = new GamePanel();
+        MatchingCard gamePanel = new MatchingCard();
         add(gamePanel);
 
         setVisible(true);
