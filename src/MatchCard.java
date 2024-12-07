@@ -6,22 +6,22 @@ import javax.swing.*;
 
 public class MatchCard {
 
-    int rows = 4;  // kisul
-    int cols = 6; // kisul
-    int cardWidth = 90; // kisul
-    int cardHeight = 128; // kisul
+    int rows = 4;  
+    int cols = 6; 
+    int cardWidth = 90; 
+    int cardHeight = 128; 
 
-    int boardWidth = cols * cardWidth; // kisul
-    int boardHeight = rows * cardHeight; // kisul
+    int boardWidth = cols * cardWidth; 
+    int boardHeight = rows * cardHeight; 
 
-    JFrame frame = new JFrame("Memoriez Matching Card"); // Kisul
-    JLabel textLabel = new JLabel(); // Kisul
-    JPanel textPanel = new JPanel(); // Kisul
-    JPanel mainPanel; // Kisul
-    JPanel boardPanel = new JPanel(); // Kisul
+    JFrame frame = new JFrame("Memoriez Matching Card"); 
+    JLabel textLabel = new JLabel(); 
+    JPanel textPanel = new JPanel(); 
+    JPanel mainPanel; 
+    JPanel boardPanel = new JPanel(); 
 
-    int errorCount = 0; // kisul
-    ArrayList<JButton> board; // kisul
+    int errorCount = 0; 
+    ArrayList<JButton> board; 
 
     MatchCard() {
         AudioPlayer audioPlayer = new AudioPlayer();
