@@ -19,10 +19,23 @@ public class MatchCard {
     JPanel textPanel = new JPanel(); 
     JPanel mainPanel; 
     JPanel boardPanel = new JPanel(); 
+    JPanel restartGamePanel = new JPanel();  
+    JButton restartButton = new JButton();
 
     int errorCount = 0; 
     ArrayList<JButton> board; 
 
+
+    Timer reviewCardsTimer; 
+
+    JLabel timerLabel = new JLabel();
+    Timer gameTimer; 
+
+    // Set Waktu Awal Permainan
+    int initialTime = 120;
+    // Waktu yang tersisa 
+    int timeLeft = initialTime; 
+    
     MatchCard() {
         AudioPlayer audioPlayer = new AudioPlayer();
         audioPlayer.playBackgroundMusic("src/sound/bg_music.wav");
