@@ -15,7 +15,7 @@ public class AudioPlayer {
                 backgroundMusic.open(audioStream);
                 // Menambahkan listener untuk mendeteksi saat musik selesai
                 backgroundMusic.addLineListener(new LineListener() {
-                     @Override
+                    @Override
                     public void update(LineEvent event) {
                         if (event.getType() == LineEvent.Type.STOP) {
                             // Jika musik selesai (STOP), kita ulangi musik
@@ -31,5 +31,12 @@ public class AudioPlayer {
                 e.printStackTrace();
             }
         }).start();
+    }
+
+    public void stopBackgroundMusic() {
+        if (backgroundMusic != null && backgroundMusic.isRunning()) {
+            backgroundMusic.stop();  // Menghentikan pemutaran musik
+            backgroundMusic.close(); // Menutup Clip untuk membersihkan sumber daya
+        }
     }
 }
