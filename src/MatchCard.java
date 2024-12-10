@@ -264,7 +264,7 @@ public class MatchCard {
                         // System.exit(0);  
                     }
                     // Panggil fungsi restart jika waktu habis
-                    restartGame();  
+                    // restartGame();  
                 }
             }
         });
