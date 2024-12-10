@@ -11,6 +11,11 @@ class BackgroundPanel extends JPanel {
     public BackgroundPanel(String imagePath) {
         // Memuat gambar latar belakang
         this.backgroundImage = new ImageIcon(imagePath).getImage();
+        if (backgroundImage == null) {
+            System.out.println("Gambar tidak ditemukan!");
+        } else {
+            System.out.println("Gambar berhasil dimuat!");
+        }        
     }
 
     @Override

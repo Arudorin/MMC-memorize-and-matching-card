@@ -8,52 +8,59 @@ public class MatchCard {
 
     String[] cardList = {
         "a", "b", "c", "d", "e", "f", "g", "h", "i", "j"
-    };
+    }; 
 
-    int rows = 4;
-    int cols = 6;
-    int cardWidth = 90;
-    int cardHeight = 128;
+    int rows = 4;  
+    int cols = 6; 
+    int cardWidth = 90; 
+    int cardHeight = 128; 
 
-    ArrayList<Card> cardSet;
+    ArrayList<Card> cardSet;  
     ImageIcon cardBackImageIcon;
 
-    int boardWidth = cols * cardWidth;
-    int boardHeight = rows * cardHeight;
+    int boardWidth = cols * cardWidth; 
+    int boardHeight = rows * cardHeight; 
 
     JFrame frame = new JFrame("Memoriez Matching Card");
     JLabel textLabel = new JLabel();
     JPanel textPanel = new JPanel();
     JPanel mainPanel;
     JPanel boardPanel = new JPanel();
-    JPanel restartGamePanel = new JPanel();
-    JButton restartButton = new JButton();
+    JPanel restartGamePanel = new JPanel();  
+    JButton restartButton = new JButton(); 
 
     int errorCount = 0;
     ArrayList<JButton> board;
-    Timer hideCardTimer;
-    boolean gameReady = false;
-    JButton card1Selected;
-    JButton card2Selected;
+    Timer hideCardTimer; 
+    boolean gameReady = false; 
+    JButton card1Selected; 
+    JButton card2Selected; 
 
     // Variabel untuk jumlah pasangan yang sudah dicocokkan
-    int matchedPairs = 0;  
-    Timer reviewCardsTimer;
+    int matchedPairs = 0;   
+    Timer reviewCardsTimer; 
 
-    JLabel timerLabel = new JLabel();
-    Timer gameTimer;
+    JLabel timerLabel = new JLabel(); 
+    JLabel playerLabel = new JLabel();
+
+    Timer gameTimer; 
 
     // Set Waktu Awal Permainan
-    int initialTime = 120;
+    int initialTime = 10; 
     // Waktu yang tersisa 
     int timeLeft = initialTime;  
 
-    MatchCard() {
-        AudioPlayer audioPlayer = new AudioPlayer();
-        audioPlayer.playBackgroundMusic("src/sound/bg_music.wav");
+    // private DatabaseHandler dbHandler;
+
+    String globalPlayerName;
+    
+    MatchCard(String playerName) {
+        // AudioPlayer audioPlayer = new AudioPlayer();
+        // audioPlayer.playBackgroundMusic("src/sound/bg_music.wav");
         setupCards();
         shuffleCards();
 
+        globalPlayerName = playerName;
         // Membuat panel latar belakang dan menambahkannya ke frame
         BackgroundPanel backgroundPanel = new BackgroundPanel("src/img/background.jpg");
         backgroundPanel.setLayout(new BorderLayout());
@@ -64,9 +71,17 @@ public class MatchCard {
 
         frame.setResizable(true);
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+
         
         // Mengubah layout textPanel menjadi BoxLayout vertikal
         textPanel.setLayout(new BoxLayout(textPanel, BoxLayout.Y_AXIS));
+        
+                
+        // namePanel.add(new JLabel("Score: " + Integer.toString(matchedPairs)));
+        playerLabel.setFont(new Font("Arial", Font.BOLD, 20));
+        playerLabel.setHorizontalAlignment(JLabel.CENTER);
+        playerLabel.setText(playerName);
+        playerLabel.setAlignmentX(Component.CENTER_ALIGNMENT);  // Menjaga agar label terpusat
         
         // Menambahkan timerLabel di atas dan textLabel di bawah
         timerLabel.setFont(new Font("Arial", Font.BOLD, 20));
@@ -80,6 +95,8 @@ public class MatchCard {
         textLabel.setAlignmentX(Component.CENTER_ALIGNMENT);  // Menjaga agar label terpusat
         
         // Menambahkan kedua label ke textPanel
+        textPanel.add(playerLabel);
+        textPanel.add(Box.createVerticalStrut(10));  // Memberikan jarak antara timer dan error
         textPanel.add(timerLabel);
         textPanel.add(Box.createVerticalStrut(10));  // Memberikan jarak antara timer dan error
         textPanel.add(textLabel);
@@ -106,8 +123,10 @@ public class MatchCard {
         boardPanel.setOpaque(false);
 
         mainPanel.setBorder(BorderFactory.createEmptyBorder(100,500,70,500));
-        mainPanel.setBackground(Color.cyan);
-        mainPanel.add(boardPanel, BorderLayout.CENTER);
+        // mainPanel.setBorder(BorderFactory.createEmptyBorder(0,0,0,0));
+        // mainPanel.setLayout(new BoxLayout(mainPanel, BoxLayout.Y_AXIS));
+
+        // mainPanel.setBackground(Color.cyan);
 
         for (int i = 0; i < cardSet.size(); i++) {
             JButton tile = new JButton();
@@ -162,7 +181,10 @@ public class MatchCard {
                                         restartGame();  
                                     } else {
                                         // Keluar dari aplikasi jika pemain memilih NO
-                                        System.exit(0);  
+                                        // updateScore();
+                                        new HomePage();
+                                        frame.dispose();
+                                        // System.exit(0);  
                                     }
                                 }
                             }
@@ -182,7 +204,7 @@ public class MatchCard {
         restartButton.setFocusable(false);
         restartButton.setEnabled(false);
 
-        restartButton.addActionListener(new ActionListener() {
+        restartButton.addActionListener(new ActionListener() { 
             @Override
             public void actionPerformed(ActionEvent e) {
                 if (!gameReady) {
@@ -236,7 +258,10 @@ public class MatchCard {
                         restartGame();  
                     } else {
                         // Keluar dari aplikasi jika pemain memilih NO
-                        System.exit(0);  
+                        // updateScore();
+                        new HomePage();
+                        frame.dispose();
+                        // System.exit(0);  
                     }
                     // Panggil fungsi restart jika waktu habis
                     restartGame();  
@@ -247,7 +272,6 @@ public class MatchCard {
         gameTimer.start();  
 
     }
-
     void setupCards() {
         cardSet = new ArrayList<Card>();
         for (String cardName : cardList) {
@@ -325,5 +349,20 @@ public class MatchCard {
 
         reviewCardsTimer.setRepeats(false);
         reviewCardsTimer.start();
+
+        // Score = (100 - eror) + sisa waktu
     }
+
+    // void updateScore() {
+    //     int score = 100 - errorCount + timeLeft;
+    //     this.dbHandler.updateScore(globalPlayerName, score);
+
+    //     if (this.dbHandler != null) {
+    //         this.dbHandler.updateScore(globalPlayerName, score);
+    //     } else {
+    //         // Handle the case when dbHandler is null
+    //         System.out.println("Error: DatabaseHandler is not initialized.");
+    //     }
+         
+    // }
 }
