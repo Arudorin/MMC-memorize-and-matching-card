@@ -46,11 +46,11 @@ public class MatchCard {
     Timer gameTimer; 
 
     // Set Waktu Awal Permainan
-    int initialTime = 10; 
+    int initialTime = 25; 
     // Waktu yang tersisa 
     int timeLeft = initialTime;  
 
-    // private DatabaseHandler dbHandler;
+    private DatabaseHandler dbHandler;
 
     String globalPlayerName;
     
@@ -59,6 +59,8 @@ public class MatchCard {
         // audioPlayer.playBackgroundMusic("src/sound/bg_music.wav");
         setupCards();
         shuffleCards();
+
+        dbHandler = new DatabaseHandler();
 
         globalPlayerName = playerName;
         // Membuat panel latar belakang dan menambahkannya ke frame
@@ -181,7 +183,7 @@ public class MatchCard {
                                         restartGame();  
                                     } else {
                                         // Keluar dari aplikasi jika pemain memilih NO
-                                        // updateScore();
+                                        updateScore();
                                         new HomePage();
                                         frame.dispose();
                                         // System.exit(0);  
@@ -258,7 +260,7 @@ public class MatchCard {
                         restartGame();  
                     } else {
                         // Keluar dari aplikasi jika pemain memilih NO
-                        // updateScore();
+                        updateScore();
                         new HomePage();
                         frame.dispose();
                         // System.exit(0);  
@@ -350,19 +352,19 @@ public class MatchCard {
         reviewCardsTimer.setRepeats(false);
         reviewCardsTimer.start();
 
-        // Score = (100 - eror) + sisa waktu
     }
+    
+    void updateScore() {
+        // Score = (100 - eror) + sisa waktu
+        int score = 100 - errorCount + timeLeft;
+        dbHandler.getUsers();
+        dbHandler.updateScore(globalPlayerName, score);
 
-    // void updateScore() {
-    //     int score = 100 - errorCount + timeLeft;
-    //     this.dbHandler.updateScore(globalPlayerName, score);
-
-    //     if (this.dbHandler != null) {
-    //         this.dbHandler.updateScore(globalPlayerName, score);
-    //     } else {
-    //         // Handle the case when dbHandler is null
-    //         System.out.println("Error: DatabaseHandler is not initialized.");
-    //     }
+        if (dbHandler != null) {
+            dbHandler.updateScore(globalPlayerName, score);
+        } else {
+            System.out.println("Error: DatabaseHandler is not initialized.");
+        }
          
-    // }
+    }
 }
