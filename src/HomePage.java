@@ -3,92 +3,88 @@ import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
-public class HomePage {
+public class HomePage extends JPanel {
 
-    private JFrame homeFrame;
-    private JPanel homePanel;
     private JTextField nameField;
     private JButton startButton, leaderboardButton, exitButton;
-    private DatabaseHandler dbHandler; // Tambahkan DatabaseHandler
+    private DatabaseHandler dbHandler;
     private String playerName;
+    private CardLayout cardLayout;
+    private JPanel mainPanel;
 
-    public HomePage() {
-        dbHandler = new DatabaseHandler(); // Inisialisasi DatabaseHandler
+    public HomePage(CardLayout cardLayout, JPanel mainPanel) {
+        this.cardLayout = cardLayout;
+        this.mainPanel = mainPanel;
 
-        homeFrame = new JFrame("Welcome to Memoriez Matching Card");
-        homeFrame.setLayout(new BorderLayout());
-        homeFrame.setSize(350, 400);
-        homeFrame.setLocationRelativeTo(null);
-        homeFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        dbHandler = new DatabaseHandler();
+
+        setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
+        setBackground(new Color(245, 245, 245));
+        setBorder(BorderFactory.createEmptyBorder(20, 20, 20, 20));
 
         JLabel nameGameLabel = new JLabel("MMC");
         nameGameLabel.setFont(new Font("poppins", Font.BOLD, 24));
         nameGameLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
-        
 
         JLabel welcomeLabel = new JLabel("Masukkan Nickname Anda:");
         welcomeLabel.setFont(new Font("poppins", Font.BOLD, 18));
         welcomeLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
 
-        nameField = new JTextField(15); // Lebar dalam karakter
+        nameField = new JTextField(15);
         nameField.setFont(new Font("Poppins", Font.PLAIN, 14));
-        nameField.setMaximumSize(new Dimension(150, 40)); // Lebar 150px, Tinggi 25px
-        nameField.setAlignmentX(Component.CENTER_ALIGNMENT); // Agar teksField sejajar di tengah
-        nameField.setHorizontalAlignment(JTextField.CENTER); // Teks di tengah
-
+        nameField.setMaximumSize(new Dimension(150, 40));
+        nameField.setAlignmentX(Component.CENTER_ALIGNMENT);
+        nameField.setHorizontalAlignment(JTextField.CENTER);
 
         startButton = new JButton("Mulai");
         startButton.setFont(new Font("Poppins", Font.BOLD, 14));
-        startButton.setBackground(new Color(0, 122, 204));  // Biru
+        startButton.setBackground(new Color(0, 122, 204));
         startButton.setForeground(Color.WHITE);
         startButton.setFocusPainted(false);
         startButton.setAlignmentX(Component.CENTER_ALIGNMENT);
         startButton.setBorder(BorderFactory.createCompoundBorder(
-            BorderFactory.createLineBorder(new Color(0, 122, 204), 2), // Border luar (opsional)
-            BorderFactory.createEmptyBorder(5, 20, 5, 20)           // Padding dalam: atas, kiri, bawah, kanan
+            BorderFactory.createLineBorder(new Color(0, 122, 204), 2),
+            BorderFactory.createEmptyBorder(5, 20, 5, 20)
         ));
-        
+
         leaderboardButton = new JButton("Leaderboard");
         leaderboardButton.setFont(new Font("Poppins", Font.BOLD, 14));
-        leaderboardButton.setBackground(new Color(34, 193, 195));  // Hijau Biru
+        leaderboardButton.setBackground(new Color(34, 193, 195));
         leaderboardButton.setForeground(Color.WHITE);
         leaderboardButton.setFocusPainted(false);
         leaderboardButton.setAlignmentX(Component.CENTER_ALIGNMENT);
         leaderboardButton.setBorder(BorderFactory.createCompoundBorder(
-            BorderFactory.createLineBorder(new Color(34, 193, 195), 2), // Border luar (opsional)
-            BorderFactory.createEmptyBorder(5, 20, 5, 20)             // Padding dalam
+            BorderFactory.createLineBorder(new Color(34, 193, 195), 2),
+            BorderFactory.createEmptyBorder(5, 20, 5, 20)
         ));
-        
+
         exitButton = new JButton("Keluar");
         exitButton.setFont(new Font("Poppins", Font.BOLD, 14));
-        exitButton.setBackground(new Color(255, 87, 34));  // Merah Oranye
+        exitButton.setBackground(new Color(255, 87, 34));
         exitButton.setForeground(Color.WHITE);
         exitButton.setFocusPainted(false);
         exitButton.setAlignmentX(Component.CENTER_ALIGNMENT);
         exitButton.setBorder(BorderFactory.createCompoundBorder(
-            BorderFactory.createLineBorder(new Color(255, 87, 34), 2), // Border luar (opsional)
-            BorderFactory.createEmptyBorder(5, 20, 5, 20)           // Padding dalam
+            BorderFactory.createLineBorder(new Color(255, 87, 34), 2),
+            BorderFactory.createEmptyBorder(5, 20, 5, 20)
         ));
-        
 
-        // Action listeners
         startButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 playerName = nameField.getText().trim();
                 if (!playerName.isEmpty()) {
-                    // Periksa apakah nama sudah ada di database
                     if (dbHandler.checkIfUserExists(playerName)) {
-                        JOptionPane.showMessageDialog(homeFrame, "Welcome back, " + playerName + "! Starting the game...");
+                        JOptionPane.showMessageDialog(null, "Welcome back, " + playerName + "! Starting the game...");
                     } else {
-                        // Masukkan pemain ke database hanya jika nama tidak ada
-                        dbHandler.updateScore(playerName, 0); // Set skor awal ke 0
-                        JOptionPane.showMessageDialog(homeFrame, "Welcome, " + playerName + "! Starting the game...");
+                        dbHandler.updateScore(playerName, 0);
+                        JOptionPane.showMessageDialog(null, "Welcome, " + playerName + "! Starting the game...");
                     }
-                    homeFrame.dispose(); // Tutup halaman utama
-                    new MatchCard(playerName);  // Panggil game utama di sini
+                    MatchCard matchCard = new MatchCard(playerName, cardLayout, mainPanel);
+                    mainPanel.add(matchCard, "MatchCard");
+                    cardLayout.show(mainPanel, "MatchCard");
                 } else {
-                    JOptionPane.showMessageDialog(homeFrame, "Please enter your name!");
+                    JOptionPane.showMessageDialog(null, "Please enter your name!");
                 }
             }
         });
@@ -96,7 +92,6 @@ public class HomePage {
         leaderboardButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                // Tampilkan leaderboard
                 new LeaderboardPage();
             }
         });
@@ -108,35 +103,16 @@ public class HomePage {
             }
         });
 
-        // Membuat panel untuk konten
-        homePanel = new JPanel();
-        homePanel.setLayout(new BoxLayout(homePanel, BoxLayout.Y_AXIS));
-        homePanel.setBackground(new Color(245, 245, 245));  // Warna latar belakang yang lembut
-        homePanel.setBorder(BorderFactory.createEmptyBorder(20, 20, 20, 20));  // Menambahkan padding di sekeliling panel
-
-        // Menambahkan komponen ke panel dengan jarak antar komponen
-        homePanel.add(nameGameLabel);
-        homePanel.add(Box.createVerticalStrut(20));  // Menambahkan jarak vertikal setelah welcomeLabel
-
-        homePanel.add(welcomeLabel);
-        homePanel.add(Box.createVerticalStrut(20));  // Menambahkan jarak vertikal setelah welcomeLabel
-
-        homePanel.add(nameField);
-        homePanel.add(Box.createVerticalStrut(20));  // Menambahkan jarak vertikal setelah nameField
-
-        homePanel.add(startButton);
-        homePanel.add(Box.createVerticalStrut(20));  // Menambahkan jarak vertikal setelah startButton
-
-        homePanel.add(leaderboardButton);
-        homePanel.add(Box.createVerticalStrut(20));  // Menambahkan jarak vertikal setelah leaderboardButton
-
-        homePanel.add(exitButton);
-
-        homeFrame.add(homePanel, BorderLayout.CENTER); // Menambahkan homePanel ke frame utama
-        homeFrame.setVisible(true);
-    }
-
-    public static void main(String[] args) {
-        SwingUtilities.invokeLater(HomePage::new);
+        add(nameGameLabel);
+        add(Box.createVerticalStrut(20));
+        add(welcomeLabel);
+        add(Box.createVerticalStrut(20));
+        add(nameField);
+        add(Box.createVerticalStrut(20));
+        add(startButton);
+        add(Box.createVerticalStrut(20));
+        add(leaderboardButton);
+        add(Box.createVerticalStrut(20));
+        add(exitButton);
     }
 }
