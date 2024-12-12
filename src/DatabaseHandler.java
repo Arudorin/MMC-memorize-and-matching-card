@@ -1,7 +1,5 @@
-
 import java.sql.*;
 import java.util.ArrayList;
-// import model.User;
 
 public class DatabaseHandler {
     private static final String DB_URL = "jdbc:mysql://localhost:3306/mmc";
@@ -37,16 +35,14 @@ public class DatabaseHandler {
 
     // Update or insert score
     public void updateScore(String playerName, int score) {
-        String query = "INSERT INTO user (name, score) VALUES (?, ?) ON DUPLICATE KEY UPDATE score = ?";
-        try (Connection conn = DriverManager.getConnection(DB_URL, DB_USER, DB_PASSWORD);
-             PreparedStatement stmt = conn.prepareStatement(query)) {
-
-            stmt.setString(1, playerName);
-            stmt.setInt(2, score);
-            stmt.setInt(3, score);
-            stmt.executeUpdate();
+        try (Connection conn = DriverManager.getConnection(DB_URL, DB_USER, DB_PASSWORD)) {
+            String query = "UPDATE leaderboard SET score = ? WHERE playerName = ?";
+            PreparedStatement statement = conn.prepareStatement(query);
+            statement.setInt(1, score);
+            statement.setString(2, playerName);
+            statement.executeUpdate();
         } catch (SQLException e) {
-            System.err.println("Error updating score: " + e.getMessage());
+            e.printStackTrace();
         }
     }
 
@@ -65,5 +61,20 @@ public class DatabaseHandler {
             return false;
         }
     }
-    
+
+    public int getScore(String playerName) {
+        int score = 0;
+        try (Connection conn = DriverManager.getConnection(DB_URL, DB_USER, DB_PASSWORD)) {
+            String query = "SELECT score FROM leaderboard WHERE playerName = ?";
+            PreparedStatement statement = conn.prepareStatement(query);
+            statement.setString(1, playerName);
+            ResultSet resultSet = statement.executeQuery();
+            if (resultSet.next()) {
+                score = resultSet.getInt("score");
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return score;
+    }
 }
