@@ -12,6 +12,7 @@ public class HomePage extends JPanel {
     private CardLayout cardLayout;
     private JPanel mainPanel;
 
+    // private AudioPlayer audioPlayer = new AudioPlayer();
     public HomePage(CardLayout cardLayout, JPanel mainPanel) {
         this.cardLayout = cardLayout;
         this.mainPanel = mainPanel;
@@ -92,7 +93,7 @@ public class HomePage extends JPanel {
         leaderboardButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                new LeaderboardPage();
+                new LeaderboardPage(cardLayout, mainPanel);
             }
         });
 
