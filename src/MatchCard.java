@@ -76,10 +76,14 @@
             playerLabel.setText(playerName);
             playerLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
             
-            timerLabel.setFont(new Font("Arial", Font.BOLD, 20));
+            // Menambahkan timerLabel di atas dan textLabel di bawah
+            timerLabel.setFont(new Font("poppins", Font.BOLD, 20));
             timerLabel.setHorizontalAlignment(JLabel.CENTER);
-            timerLabel.setText("Waktu Tersisa: " + timeLeft);
-            timerLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
+            int minutes = timeLeft / 60;  // Menghitung menit
+            int seconds = timeLeft % 60;  // Menghitung detik
+            // Update waktu di label dalam format menit:detik
+            timerLabel.setText(String.format("Waktu Tersisa: %02d:%02d", minutes, seconds));  
+            timerLabel.setAlignmentX(Component.CENTER_ALIGNMENT);  // Menjaga agar label terpusat
             
             textLabel.setFont(new Font("Arial", Font.BOLD, 20));
             textLabel.setHorizontalAlignment(JLabel.CENTER);
@@ -209,7 +213,11 @@
                 public void actionPerformed(ActionEvent e) {
                     if (timeLeft > 0) {
                         timeLeft--;
-                        timerLabel.setText("Waktu Tersisa: " + timeLeft);  
+                        // Update waktu di label
+                            int minutes = timeLeft / 60;  // Menghitung menit
+                            int seconds = timeLeft % 60;  // Menghitung detik
+                            // Update waktu di label dalam format menit:detik
+                            timerLabel.setText(String.format("Waktu Tersisa: %02d:%02d", minutes, seconds)); 
                     } else {
                         gameTimer.stop();  
                         gameReady = false;  
