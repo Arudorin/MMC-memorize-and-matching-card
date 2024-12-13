@@ -35,14 +35,16 @@ public class DatabaseHandler {
 
     // Update or insert score
     public void updateScore(String playerName, int score) {
-        try (Connection conn = DriverManager.getConnection(DB_URL, DB_USER, DB_PASSWORD)) {
-            String query = "UPDATE leaderboard SET score = ? WHERE playerName = ?";
-            PreparedStatement statement = conn.prepareStatement(query);
-            statement.setInt(1, score);
-            statement.setString(2, playerName);
-            statement.executeUpdate();
+        String query = "INSERT INTO user (name, score) VALUES (?, ?) ON DUPLICATE KEY UPDATE score = ?";
+        try (Connection conn = DriverManager.getConnection(DB_URL, DB_USER, DB_PASSWORD);
+             PreparedStatement stmt = conn.prepareStatement(query)) {
+
+            stmt.setString(1, playerName);
+            stmt.setInt(2, score);
+            stmt.setInt(3, score);
+            stmt.executeUpdate();
         } catch (SQLException e) {
-            e.printStackTrace();
+            System.err.println("Error updating score: " + e.getMessage());
         }
     }
 
@@ -65,7 +67,7 @@ public class DatabaseHandler {
     public int getScore(String playerName) {
         int score = 0;
         try (Connection conn = DriverManager.getConnection(DB_URL, DB_USER, DB_PASSWORD)) {
-            String query = "SELECT score FROM leaderboard WHERE playerName = ?";
+            String query = "SELECT score FROM user WHERE name = ?";
             PreparedStatement statement = conn.prepareStatement(query);
             statement.setString(1, playerName);
             ResultSet resultSet = statement.executeQuery();

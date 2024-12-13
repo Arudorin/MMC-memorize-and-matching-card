@@ -60,6 +60,9 @@ public class MatchCard extends JPanel {
         this.cardLayout = cardLayout;
         this.mainPanelContainer = mainPanelContainer;
 
+        AudioPlayer audioPlayer = new AudioPlayer();
+        audioPlayer.playBackgroundMusic("src/sound/bg_music.wav");
+
         setupCards();
         shuffleCards();
 
@@ -150,10 +153,10 @@ public class MatchCard extends JPanel {
                             if (card1Selected.getIcon() != card2Selected.getIcon()) {
                                 errorCount += 1;
                                 score = Math.max(0, score - 2); // Decrease score by 2 but not below 0
-                                timeLeft = Math.max(0, timeLeft - 2); // Decrease time by 2 seconds but not below 0
+                                // timeLeft = Math.max(0, timeLeft - 2); // Decrease time by 2 seconds but not below 0
                                 int minutes = timeLeft / 60;  // Menghitung menit
                                 int seconds = timeLeft % 60;  // Menghitung detik
-                                timerLabel.setText(String.format("Waktu Tersisa: %02d:%02d -1", minutes, seconds)); // Update timer label
+                                timerLabel.setText(String.format("Waktu Tersisa: %02d:%02d", minutes, seconds)); // Update timer label
                                 textLabel.setText("Salah: " + Integer.toString(errorCount));
                                 scoreLabel.setText("Skor: " + score); // Update score label
                                 hideCardTimer.start();  
@@ -164,7 +167,7 @@ public class MatchCard extends JPanel {
                                 scoreLabel.setText("Skor: " + score); // Update score label
                                 int minutes = timeLeft / 60;  // Menghitung menit
                                 int seconds = timeLeft % 60;  // Menghitung detik
-                                timerLabel.setText(String.format("Waktu Tersisa: %02d:%02d +5", minutes, seconds)); // Update timer label
+                                timerLabel.setText(String.format("Waktu Tersisa: %02d:%02d +5 ", minutes, seconds)); // Update timer label
                                 card1Selected = null;
                                 card2Selected = null;
 
@@ -177,6 +180,7 @@ public class MatchCard extends JPanel {
                                         restartGame();
                                         updateScore();
                                     } else {
+                                        audioPlayer.stopBackgroundMusic();
                                         updateScore();
                                         cardLayout.show(mainPanelContainer, "HomePage");
                                     }
@@ -241,6 +245,7 @@ public class MatchCard extends JPanel {
                         restartGame();
                         updateScore();  
                     } else {
+                        audioPlayer.stopBackgroundMusic();
                         updateScore();
                         cardLayout.show(mainPanelContainer, "HomePage");
                     }
@@ -321,9 +326,9 @@ public class MatchCard extends JPanel {
     void updateScore() {
         int currentHighScore = dbHandler.getScore(globalPlayerName); // Mendapatkan skor saat ini dari database
     
-        if (score > currentHighScore) { // Hanya memperbarui jika skor baru lebih tinggi
-            dbHandler.updateScore(globalPlayerName, score);
-        }
+        // if (score > currentHighScore) { // Hanya memperbarui jika skor baru lebih tinggi
+        //     dbHandler.updateScore(globalPlayerName, score);
+        // }
     
         if (dbHandler != null) {
             if (score > currentHighScore) {
