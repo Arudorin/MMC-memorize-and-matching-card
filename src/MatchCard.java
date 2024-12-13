@@ -195,20 +195,25 @@ public class MatchCard extends JPanel {
         }
         mainPanel.add(boardPanel);
 
-        restartButton.setFont(new Font("Arial", Font.BOLD, 20));
-        restartButton.setText("Restart Game");
-        restartButton.setPreferredSize(new Dimension(boardWidth, 30));
-        restartButton.setFocusable(false);
-        restartButton.setEnabled(false);
+        JButton restartButton = new JButton();
+        restartButton.setContentAreaFilled(false); 
+        restartButton.setBorderPainted(false); 
+        restartButton.setFocusPainted(false); 
 
-        restartButton.addActionListener(new ActionListener() { 
+       
+        Image restartImg = new ImageIcon(new File("src/img/restart_button.png").getAbsolutePath()).getImage();
+        ImageIcon restartIcon = new ImageIcon(restartImg.getScaledInstance(210, 70, Image.SCALE_SMOOTH));
+        restartButton.setIcon(restartIcon);
+
+        
+        restartButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 if (!gameReady) {
                     return;
                 }
 
-                restartGame();  
+                restartGame();
                 hideCardTimer.start();
             }
         });
