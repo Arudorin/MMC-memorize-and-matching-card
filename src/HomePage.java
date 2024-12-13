@@ -1,26 +1,25 @@
-import javax.swing.*;
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
+import javax.swing.*;
 
 public class HomePage extends JPanel {
-
     private JTextField nameField;
     private JButton startButton, leaderboardButton, exitButton;
     private DatabaseHandler dbHandler;
     private String playerName;
     private CardLayout cardLayout;
     private JPanel mainPanel;
+    private Image backgroundImage;
 
-    // private AudioPlayer audioPlayer = new AudioPlayer();
     public HomePage(CardLayout cardLayout, JPanel mainPanel) {
         this.cardLayout = cardLayout;
         this.mainPanel = mainPanel;
 
         dbHandler = new DatabaseHandler();
 
+        // Load the background image
+        backgroundImage = new ImageIcon("src/img/background_home.jpg").getImage();
+
         setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
-        setBackground(new Color(245, 245, 245));
         setBorder(BorderFactory.createEmptyBorder(20, 20, 20, 20));
 
         JLabel nameGameLabel = new JLabel("MMC");
@@ -70,39 +69,26 @@ public class HomePage extends JPanel {
             BorderFactory.createEmptyBorder(5, 20, 5, 20)
         ));
 
-        startButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                playerName = nameField.getText().trim();
-                if (!playerName.isEmpty()) {
-                    if (dbHandler.checkIfUserExists(playerName)) {
-                        JOptionPane.showMessageDialog(null, "Welcome back, " + playerName + "! Starting the game...");
-                    } else {
-                        dbHandler.updateScore(playerName, 0);
-                        JOptionPane.showMessageDialog(null, "Welcome, " + playerName + "! Starting the game...");
-                    }
-                    MatchCard matchCard = new MatchCard(playerName, cardLayout, mainPanel);
-                    mainPanel.add(matchCard, "MatchCard");
-                    cardLayout.show(mainPanel, "MatchCard");
+        startButton.addActionListener(e -> {
+            playerName = nameField.getText().trim();
+            if (!playerName.isEmpty()) {
+                if (dbHandler.checkIfUserExists(playerName)) {
+                    JOptionPane.showMessageDialog(null, "Welcome back, " + playerName + "! Starting the game...");
                 } else {
-                    JOptionPane.showMessageDialog(null, "Please enter your name!");
+                    dbHandler.updateScore(playerName, 0);
+                    JOptionPane.showMessageDialog(null, "Welcome, " + playerName + "! Starting the game...");
                 }
+                MatchCard matchCard = new MatchCard(playerName, cardLayout, mainPanel);
+                mainPanel.add(matchCard, "MatchCard");
+                cardLayout.show(mainPanel, "MatchCard");
+            } else {
+                JOptionPane.showMessageDialog(null, "Please enter your name!");
             }
         });
 
-        leaderboardButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                new LeaderboardPage(cardLayout, mainPanel);
-            }
-        });
+        leaderboardButton.addActionListener(e -> new LeaderboardPage(cardLayout, mainPanel));
 
-        exitButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                System.exit(0);
-            }
-        });
+        exitButton.addActionListener(e -> System.exit(0));
 
         add(nameGameLabel);
         add(Box.createVerticalStrut(20));
@@ -115,5 +101,11 @@ public class HomePage extends JPanel {
         add(leaderboardButton);
         add(Box.createVerticalStrut(20));
         add(exitButton);
+    }
+
+    @Override
+    protected void paintComponent(Graphics g) {
+        super.paintComponent(g);
+        g.drawImage(backgroundImage, 0, 0, getWidth(), getHeight(), this);
     }
 }
