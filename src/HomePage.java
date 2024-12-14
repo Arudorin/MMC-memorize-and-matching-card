@@ -20,11 +20,11 @@ public class HomePage extends JPanel {
         backgroundImage = new ImageIcon("src/img/background_home.jpg").getImage();
 
         setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
-        setBorder(BorderFactory.createEmptyBorder(300, 20, 20, 20));
+        setBorder(BorderFactory.createEmptyBorder(200, 20, 20, 20));
 
-        JLabel nameGameLabel = new JLabel("MMC");
-        nameGameLabel.setFont(new Font("poppins", Font.BOLD, 24));
+        JLabel nameGameLabel = new JLabel(new ImageIcon("src/img/logo_mmc.png"));
         nameGameLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
+        
 
         JLabel welcomeLabel = new JLabel("Masukkan Nickname Anda:");
         welcomeLabel.setFont(new Font("poppins", Font.BOLD, 18));
