@@ -103,10 +103,10 @@ public class MatchCard extends JPanel {
         timerLabel.setText(String.format("Waktu Tersisa: %02d:%02d", minutes, seconds));
         timerLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
         
-        textLabel.setFont(new Font("Arial", Font.BOLD, 20));
-        textLabel.setHorizontalAlignment(JLabel.CENTER);
-        textLabel.setText("Salah: " + Integer.toString(errorCount));
-        textLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
+        // textLabel.setFont(new Font("Arial", Font.BOLD, 20));
+        // textLabel.setHorizontalAlignment(JLabel.CENTER);
+        // textLabel.setText("Salah: " + Integer.toString(errorCount));
+        // textLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
 
         scoreLabel.setFont(new Font("Arial", Font.BOLD, 20)); // Set font for score label
         scoreLabel.setHorizontalAlignment(JLabel.CENTER);
@@ -116,8 +116,8 @@ public class MatchCard extends JPanel {
         textPanel.add(playerLabel);
         textPanel.add(Box.createVerticalStrut(10));
         textPanel.add(timerLabel);
-        textPanel.add(Box.createVerticalStrut(10));
-        textPanel.add(textLabel);
+        // textPanel.add(Box.createVerticalStrut(10));
+        // textPanel.add(textLabel);
         textPanel.add(Box.createVerticalStrut(10));
         textPanel.add(scoreLabel); // Add score label to text panel
         
