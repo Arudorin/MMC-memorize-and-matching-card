@@ -16,11 +16,11 @@ public class HomePage extends JPanel {
 
         dbHandler = new DatabaseHandler();
 
-        // Load the background image
+
         backgroundImage = new ImageIcon("src/img/background_home.jpg").getImage();
 
         setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
-        setBorder(BorderFactory.createEmptyBorder(20, 20, 20, 20));
+        setBorder(BorderFactory.createEmptyBorder(300, 20, 20, 20));
 
         JLabel nameGameLabel = new JLabel("MMC");
         nameGameLabel.setFont(new Font("poppins", Font.BOLD, 24));
@@ -36,38 +36,42 @@ public class HomePage extends JPanel {
         nameField.setAlignmentX(Component.CENTER_ALIGNMENT);
         nameField.setHorizontalAlignment(JTextField.CENTER);
 
-        startButton = new JButton("Mulai");
-        startButton.setFont(new Font("Poppins", Font.BOLD, 14));
-        startButton.setBackground(new Color(0, 122, 204));
-        startButton.setForeground(Color.WHITE);
-        startButton.setFocusPainted(false);
+        startButton = new JButton(new ImageIcon("src/img/start_button.png"));
+        startButton.setContentAreaFilled(false); 
+        startButton.setBorderPainted(false);     
+        startButton.setFocusPainted(false);    
         startButton.setAlignmentX(Component.CENTER_ALIGNMENT);
-        startButton.setBorder(BorderFactory.createCompoundBorder(
-            BorderFactory.createLineBorder(new Color(0, 122, 204), 2),
-            BorderFactory.createEmptyBorder(5, 20, 5, 20)
-        ));
+        
+      
+        startButton.addActionListener(e -> {
+           
+            System.out.println("Start button clicked!");
+        });
 
-        leaderboardButton = new JButton("Leaderboard");
-        leaderboardButton.setFont(new Font("Poppins", Font.BOLD, 14));
-        leaderboardButton.setBackground(new Color(34, 193, 195));
-        leaderboardButton.setForeground(Color.WHITE);
-        leaderboardButton.setFocusPainted(false);
+        leaderboardButton = new JButton(new ImageIcon("src/img/leaderboard_button.png"));
+        leaderboardButton.setContentAreaFilled(false); 
+        leaderboardButton.setBorderPainted(false);    
+        leaderboardButton.setFocusPainted(false);      
         leaderboardButton.setAlignmentX(Component.CENTER_ALIGNMENT);
-        leaderboardButton.setBorder(BorderFactory.createCompoundBorder(
-            BorderFactory.createLineBorder(new Color(34, 193, 195), 2),
-            BorderFactory.createEmptyBorder(5, 20, 5, 20)
-        ));
 
-        exitButton = new JButton("Keluar");
-        exitButton.setFont(new Font("Poppins", Font.BOLD, 14));
-        exitButton.setBackground(new Color(255, 87, 34));
-        exitButton.setForeground(Color.WHITE);
-        exitButton.setFocusPainted(false);
+    
+        leaderboardButton.addActionListener(e -> {
+           
+            System.out.println("Leaderboard button clicked!");
+        });
+
+        exitButton = new JButton(new ImageIcon("src/img/exit_button.png"));
+        exitButton.setContentAreaFilled(false); 
+        exitButton.setBorderPainted(false);     
+        exitButton.setFocusPainted(false);    
         exitButton.setAlignmentX(Component.CENTER_ALIGNMENT);
-        exitButton.setBorder(BorderFactory.createCompoundBorder(
-            BorderFactory.createLineBorder(new Color(255, 87, 34), 2),
-            BorderFactory.createEmptyBorder(5, 20, 5, 20)
-        ));
+
+
+        exitButton.addActionListener(e -> {
+        
+            System.exit(0); 
+        });
+
 
         startButton.addActionListener(e -> {
             playerName = nameField.getText().trim();
