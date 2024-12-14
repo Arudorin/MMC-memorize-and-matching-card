@@ -33,6 +33,20 @@ public class AudioPlayer {
         }).start();
     }
 
+    public void playSoundEffect(String filePath) {
+        new Thread(() -> {
+            try {
+                File file = new File(filePath);
+                AudioInputStream audioStream = AudioSystem.getAudioInputStream(file);
+                Clip soundEffect = AudioSystem.getClip();
+                soundEffect.open(audioStream);
+                soundEffect.start();  // Memulai pemutaran sound effect
+            } catch (UnsupportedAudioFileException | IOException | LineUnavailableException e) {
+                e.printStackTrace();
+            }
+        }).start();
+    }
+
     public void stopBackgroundMusic() {
         if (backgroundMusic != null && backgroundMusic.isRunning()) {
             backgroundMusic.stop();  // Menghentikan pemutaran musik
