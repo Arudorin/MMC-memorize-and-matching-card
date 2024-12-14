@@ -3,6 +3,7 @@ import javax.swing.*;
 
 import API.DatabaseHandler;
 import model.User;
+import utils.AudioPlayer;
 
 import java.awt.*;
 import java.util.ArrayList;
@@ -11,6 +12,8 @@ public class LeaderboardPage extends JPanel {
     private JFrame leaderboardFrame;
     private JPanel leaderboardPanel;
     private DatabaseHandler dbHandler;
+
+    AudioPlayer soundEffect = new AudioPlayer();
 
     public LeaderboardPage(CardLayout cardLayout, JPanel mainPanel) {
         dbHandler = new DatabaseHandler(); // Initialize DatabaseHandler
@@ -64,6 +67,7 @@ public class LeaderboardPage extends JPanel {
             BorderFactory.createEmptyBorder(5, 20, 5, 20) // Padding
         ));
         backButton.addActionListener(e -> {
+            soundEffect.playSoundEffect("Assets/sound/tap.wav");  
             leaderboardFrame.dispose(); // Close LeaderboardPage
         });
         leaderboardPanel.add(backButton);

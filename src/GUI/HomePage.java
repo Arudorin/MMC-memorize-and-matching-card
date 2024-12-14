@@ -4,6 +4,7 @@ import javax.swing.*;
 
 import API.DatabaseHandler;
 import logic.MatchCard;
+import utils.AudioPlayer;
 
 public class HomePage extends JPanel {
     private JTextField nameField;
@@ -17,6 +18,8 @@ public class HomePage extends JPanel {
     public HomePage(CardLayout cardLayout, JPanel mainPanel) {
         this.cardLayout = cardLayout;
         this.mainPanel = mainPanel;
+
+        AudioPlayer soundEffect = new AudioPlayer();
 
         dbHandler = new DatabaseHandler();
 
@@ -49,7 +52,7 @@ public class HomePage extends JPanel {
         
       
         startButton.addActionListener(e -> {
-           
+            // soundEffect.playSoundEffect("Assets/sound/tap.wav");  
             System.out.println("Start button clicked!");
         });
 
@@ -61,7 +64,7 @@ public class HomePage extends JPanel {
 
     
         leaderboardButton.addActionListener(e -> {
-           
+            soundEffect.playSoundEffect("Assets/sound/tap.wav");  
             System.out.println("Leaderboard button clicked!");
         });
 
@@ -73,12 +76,13 @@ public class HomePage extends JPanel {
 
 
         exitButton.addActionListener(e -> {
-        
+            soundEffect.playSoundEffect("Assets/sound/tap.wav");  
             System.exit(0); 
         });
 
 
         startButton.addActionListener(e -> {
+            soundEffect.playSoundEffect("Assets/sound/tap.wav");  
             playerName = nameField.getText().trim();
             if (!playerName.isEmpty()) {
                 if (dbHandler.checkIfUserExists(playerName)) {
