@@ -1,3 +1,4 @@
+import GUI.*;
 import javax.swing.*;
 import java.awt.*;
 
@@ -19,6 +20,11 @@ public class Main {
 
                 frame.add(mainPanel);
                 frame.setVisible(true);
+                System.out.println("Main frame is visible");
+
+                // Debugging: Check if HomePage is added and shown
+                cardLayout.show(mainPanel, "HomePage");
+                System.out.println("HomePage should be visible");
             }
         });
     }
