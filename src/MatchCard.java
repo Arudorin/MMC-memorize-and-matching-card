@@ -63,6 +63,8 @@ public class MatchCard extends JPanel {
         AudioPlayer audioPlayer = new AudioPlayer();
         audioPlayer.playBackgroundMusic("src/sound/bg_music.wav");
 
+        AudioPlayer soundEffect = new AudioPlayer();
+
         setupCards();
         shuffleCards();
 
@@ -122,7 +124,7 @@ public class MatchCard extends JPanel {
         boardPanel.setLayout(new GridLayout(rows, cols, 0, 0));  
         boardPanel.setOpaque(false);
 
-        mainPanel.setBorder(BorderFactory.createEmptyBorder(100,500,70,500));
+        mainPanel.setBorder(BorderFactory.createEmptyBorder(50,500,70,500));
 
         for (int i = 0; i < cardSet.size(); i++) {
             JButton tile = new JButton();
@@ -141,16 +143,20 @@ public class MatchCard extends JPanel {
 
                     JButton tile = (JButton) e.getSource();
                     if (tile.getIcon() == cardBackImageIcon) {
-                        if (card1Selected == null) {  
+                        if (card1Selected == null) {
+                            soundEffect.playSoundEffect("src/sound/tap.wav");  
                             card1Selected = tile;
                             int index = board.indexOf(card1Selected);
                             card1Selected.setIcon(cardSet.get(index).cardImageIcon);
                         } else if (card2Selected == null) {  
+                            soundEffect.playSoundEffect("src/sound/tap.wav");  
                             card2Selected = tile;
                             int index = board.indexOf(card2Selected);
                             card2Selected.setIcon(cardSet.get(index).cardImageIcon);
 
                             if (card1Selected.getIcon() != card2Selected.getIcon()) {
+                                // soundEffect.playSoundEffect("src/sound/wrong.wav");
+                                soundEffect.playSoundEffect("src/sound/false.wav");
                                 errorCount += 1;
                                 score = Math.max(0, score - 2); // Decrease score by 2 but not below 0
                                 // timeLeft = Math.max(0, timeLeft - 2); // Decrease time by 2 seconds but not below 0
@@ -161,6 +167,8 @@ public class MatchCard extends JPanel {
                                 scoreLabel.setText("Skor: " + score); // Update score label
                                 hideCardTimer.start();  
                             } else {
+                                // soundEffect.playSoundEffect("src/sound/matching.wav");
+                                soundEffect.playSoundEffect("src/sound/true.wav");
                                 matchedPairs += 1;  
                                 score += 10; // Increase score by 10 for each correct match
                                 timeLeft += 5; // Add 5 seconds for each correct match
@@ -329,6 +337,7 @@ public class MatchCard extends JPanel {
     }
     
     void updateScore() {
+        // score = 
         int currentHighScore = dbHandler.getScore(globalPlayerName); // Mendapatkan skor saat ini dari database
     
         // if (score > currentHighScore) { // Hanya memperbarui jika skor baru lebih tinggi

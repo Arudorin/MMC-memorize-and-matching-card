@@ -20,15 +20,16 @@ public class HomePage extends JPanel {
         backgroundImage = new ImageIcon("src/img/background_home.jpg").getImage();
 
         setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
-        setBorder(BorderFactory.createEmptyBorder(200, 20, 20, 20));
+        setBorder(BorderFactory.createEmptyBorder(30, 20, 20, 20));
 
         JLabel nameGameLabel = new JLabel(new ImageIcon("src/img/logo_mmc.png"));
         nameGameLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
         
 
-        JLabel welcomeLabel = new JLabel("Masukkan Nickname Anda:");
+        JLabel welcomeLabel = new JLabel("Masukkan Nickname");
         welcomeLabel.setFont(new Font("poppins", Font.BOLD, 18));
         welcomeLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
+        welcomeLabel.setForeground(Color.white);
 
         nameField = new JTextField(15);
         nameField.setFont(new Font("Poppins", Font.PLAIN, 14));
